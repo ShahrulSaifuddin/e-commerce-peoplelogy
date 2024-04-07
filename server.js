@@ -6,14 +6,11 @@ const app = express();
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import authRouter from './routers/authRouter.js';
-import taskRouter from './routers/taskRouter.js';
-import constantRouter from './routers/constantRouter.js';
-import notificationRouter from './routers/notificationRouter.js';
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
-import { authenticateUser } from './middleware/authMiddleware.js';
+// import { authenticateUser } from './middleware/authMiddleware.js';
 import cookieParser from 'cookie-parser';
 import cloudinary from 'cloudinary';
-import userRouter from './routers/userRouter.js';
+// import userRouter from './routers/userRouter.js';
 // public
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -34,11 +31,8 @@ app.use(express.static(path.resolve(__dirname, './client/dist')));
 app.use(cookieParser());
 app.use(express.json());
 
-// app.use('/api/v1/tasks', authenticateUser, taskRouter);
 // app.use('/api/v1/users', authenticateUser, userRouter);
-// app.use('/api/v1/auth', authRouter);
-// app.use('/api/v1/constant', constantRouter);
-// app.use('/api/v1/notification', notificationRouter);
+app.use('/api/v1/auth', authRouter);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, './client/dist', 'index.html'));

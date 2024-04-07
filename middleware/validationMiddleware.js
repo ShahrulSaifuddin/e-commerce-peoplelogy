@@ -2,7 +2,6 @@ import User from '../models/UserModel.js';
 import mongoose from 'mongoose';
 import { body, param, validationResult } from 'express-validator';
 import { BadRequestError, NotFoundError } from '../errors/customErrors.js';
-import Task from '../models/TaskModel.js';
 import { UnauthorizedError } from '../errors/customErrors.js';
 
 const withValidationErrors = (validateValues) => {
@@ -12,9 +11,9 @@ const withValidationErrors = (validateValues) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         const errorMessages = errors.array().map((error) => error.msg);
-        if (errorMessages[0].startsWith('no task')) {
-          throw new NotFoundError(errorMessages);
-        }
+        // if (errorMessages[0].startsWith('no task')) {
+        //   throw new NotFoundError(errorMessages);
+        // }
         if (errorMessages[0].startsWith('not authorized')) {
           throw new UnauthorizedError('not authorized to access this route');
         }
@@ -71,14 +70,14 @@ export const validateLoginInput = withValidationErrors([
 //   body('description').notEmpty().withMessage('description is required'),
 // ]);
 
-export const validateIdParam = withValidationErrors([
-  param('id').custom(async (value) => {
-    const isValidMongoId = mongoose.Types.ObjectId.isValid(value);
-    if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
-    const task = await Task.findById(value);
-    if (!task) throw new NotFoundError(`no task with id ${value}`);
-  }),
-]);
+// export const validateIdParam = withValidationErrors([
+//   param('id').custom(async (value) => {
+//     const isValidMongoId = mongoose.Types.ObjectId.isValid(value);
+//     if (!isValidMongoId) throw new BadRequestError('invalid MongoDB id');
+//     const task = await Task.findById(value);
+//     if (!task) throw new NotFoundError(`no task with id ${value}`);
+//   }),
+// ]);
 
 // export const validateOwner = withValidationErrors([
 //   param('id').custom(async (value, { req }) => {
